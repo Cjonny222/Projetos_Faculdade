@@ -1,0 +1,59 @@
+CREATE DATABASE Faculdade;
+
+USE Faculdade;
+
+-- Tabela de Cursos
+CREATE TABLE Cursos (
+    id_curso INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    carga_horaria INT NOT NULL
+);
+
+-- Tabela de Professores
+CREATE TABLE Professores (
+    id_professor INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    cpf CHAR(11) UNIQUE NOT NULL,
+    especializacao VARCHAR(100)
+);
+
+-- Tabela de Disciplinas
+CREATE TABLE Disciplinas (
+    id_disciplina INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    carga_horaria INT NOT NULL,
+    curso_id INT NOT NULL,
+    professor_id INT,
+    FOREIGN KEY (curso_id) REFERENCES Cursos(id_curso),
+    FOREIGN KEY (professor_id) REFERENCES Professores(id_professor)
+);
+
+-- Tabela de Alunos
+CREATE TABLE Alunos (
+    id_aluno INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    cpf CHAR(11) UNIQUE NOT NULL,
+    data_nascimento DATE NOT NULL,
+    endereco VARCHAR(255),
+    curso_id INT NOT NULL,
+    FOREIGN KEY (curso_id) REFERENCES Cursos(id_curso)
+);
+
+-- Tabela de Matrículas
+CREATE TABLE Matriculas (
+    id_matricula INT AUTO_INCREMENT PRIMARY KEY,
+    aluno_id INT NOT NULL,
+    disciplina_id INT NOT NULL,
+    semestre VARCHAR(10) NOT NULL,
+    FOREIGN KEY (aluno_id) REFERENCES Alunos(id_aluno),
+    FOREIGN KEY (disciplina_id) REFERENCES Disciplinas(id_disciplina)
+);
+
+-- Tabela de Notas e Frequências
+CREATE TABLE Notas_Frequencias (
+    id_nota INT AUTO_INCREMENT PRIMARY KEY,
+    matricula_id INT NOT NULL,
+    nota DECIMAL(5,2),
+    frequencia DECIMAL(5,2),
+    FOREIGN KEY (matricula_id) REFERENCES Matriculas(id_matricula)
+);
